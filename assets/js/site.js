@@ -10,10 +10,33 @@
 
   async function fetchDeals(){
     if(deals.length) return deals;
-    try {
-      if(cfg.GAS_ENDPOINT){ const u=new URL(cfg.GAS_ENDPOINT); u.searchParams.set('action','deals'); const r=await fetch(u,{cache:'no-store'}); if(!r.ok) throw new Error('deal api'); const j=await r.json(); deals=Array.isArray(j)?j:(j.deals||[]); return deals; }
-      if(cfg.USE_SEED_DATA){ const r=await fetch('/data/public-deals.seed.json',{cache:'no-store'}); deals=await r.json(); return deals; }
-    } catch(e){ console.warn(e); }
+
+    if(cfg.GAS_ENDPOINT){
+      try {
+        const u=new URL(cfg.GAS_ENDPOINT);
+        u.searchParams.set('action','deals');
+        const r=await fetch(u,{cache:'no-store'});
+        if(!r.ok) throw new Error('deal api');
+        const j=await r.json();
+        if(j && j.ok===false) throw new Error(j.message||'deal api');
+        deals=Array.isArray(j)?j:(j.deals||[]);
+        return deals;
+      } catch(e){
+        console.warn('GAS deal API unavailable; falling back to seed data.',e);
+      }
+    }
+
+    if(cfg.USE_SEED_DATA){
+      try {
+        const r=await fetch('/data/public-deals.seed.json',{cache:'no-store'});
+        if(!r.ok) throw new Error('seed data');
+        deals=await r.json();
+        return deals;
+      } catch(e){
+        console.warn('Seed deal data unavailable.',e);
+      }
+    }
+
     return [];
   }
 
