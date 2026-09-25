@@ -4,7 +4,7 @@
 - VALUE CAPITAL
 - サービスカテゴリー：企業価値評価・不動産査定
 - 運営：株式会社U5
-- 正規URL：https://valuecapital.co.jp/
+- 正規URL：https://value-capital.jp/
 
 ## ブランドコピー
 **会社と不動産の価値、正しい選択を。**

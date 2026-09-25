@@ -1,6 +1,6 @@
 # VALUE CAPITAL
 
-`valuecapital.co.jp` 向けの静的Webサイトです。GitHub Pagesを前提とし、サイト本体はGitHub、案件・フォームデータはGoogleスプレッドシート、機密資料はGoogle Driveで分離管理します。
+`value-capital.jp` 向けの静的Webサイトです。GitHub Pagesを前提とし、サイト本体はGitHub、案件・フォームデータはGoogleスプレッドシート、機密資料はGoogle Driveで分離管理します。
 
 ## ページ
 - `/` トップ（LP型）
@@ -46,8 +46,8 @@ VALUE CAPITAL専用GA4プロパティ作成後、`assets/js/config.js` の `GA_M
 1. `robots.txt` を通常運用へ変更
 2. 必要ページの `noindex,nofollow` を削除
 3. `sitemap.xml` を最終確認
-4. GitHub Pagesへ `valuecapital.co.jp` を設定
-5. `www.valuecapital.co.jp` を正規URLへ統一
+4. GitHub Pagesへ `value-capital.jp` を設定
+5. `www.value-capital.jp` を正規URLへ統一
 6. Search Consoleのドメインプロパティを設定
 
 ## 現在の仮情報
