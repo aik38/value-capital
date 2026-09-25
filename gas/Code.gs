@@ -1,7 +1,7 @@
 const PUBLIC_SHEET = '公開用案件データ';
 const VALUATION_SHEET = '査定依頼';
 const BUYER_SHEET = '買手登録';
-const NOTIFY_EMAIL = 'info@value-capital.jp';
+const NOTIFY_EMAIL = PropertiesService.getScriptProperties().getProperty('NOTIFY_EMAIL') || 'info@value-capital.jp';
 
 function getBook_(){
   const id = PropertiesService.getScriptProperties().getProperty('SPREADSHEET_ID');
