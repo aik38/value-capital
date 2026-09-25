@@ -19,14 +19,14 @@
 
   function card(d, compact=false){
     const fields=(d.fields||[]).slice(0,compact?2:6).map(([k,v])=>`<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('');
-    return `<article class="deal-card ${compact?'compact':''}" data-kind="${esc(d.kind)}"><div class="deal-top"><span class="deal-type">${esc(d.category)}</span><span class="deal-id">${esc(d.id)}</span></div><p class="deal-region">${esc(d.region)}</p><h3>${esc(d.title)}</h3><p class="deal-headline">${esc(d.headline)}</p>${compact?'':`<dl class="deal-fields">${fields}</dl><p class="deal-feature">${esc(d.feature||'')}</p>`}<a class="deal-cta" data-deal-cta data-id="${esc(d.id)}" href="/buyer/?deal=${encodeURIComponent(d.id)}">この案仰c��詳細情報を希望する <span>→</span></a></article>`;
+    return `<article class="deal-card ${compact?'compact':''}" data-kind="${esc(d.kind)}"><div class="deal-top"><span class="deal-type">${esc(d.category)}</span><span class="deal-id">${esc(d.id)}</span></div><p class="deal-region">${esc(d.region)}</p><h3>${esc(d.title)}</h3><p class="deal-headline">${esc(d.headline)}</p>${compact?'':`<dl class="deal-fields">${fields}</dl><p class="deal-feature">${esc(d.feature||'')}</p>`}<a class="deal-cta" data-deal-cta data-id="${esc(d.id)}" href="/buyer/?deal=${encodeURIComponent(d.id)}">この案件の詳細情報を希望する <span>→</span></a></article>`;
   }
 
   async function renderHome(type='all'){
     const el=$('#home-deals'); if(!el) return; const all=await fetchDeals(); const list=all.filter(d=>d.top && (type==='all'||d.kind===type)).slice(0,6); el.innerHTML=list.length?list.map(d=>card(d,true)).join(''):'<p class="empty">公開中の案件情報を準備しています。</p>';
   }
   async function renderAll(type='all'){
-    const el=$('#all-deals'); if(!el) return; const all=await fetchDeals(); const list=all.filter(d=>type==='all'||d.kind===type); el.innerHTML=list.length?list.map(d=>card(d,false)).join(''):'<p class="empty">該当する公開案仰c��ありません。</p>';
+    const el=$('#all-deals'); if(!el) return; const all=await fetchDeals(); const list=all.filter(d=>type==='all'||d.kind===type); el.innerHTML=list.length?list.map(d=>card(d,false)).join(''):'<p class="empty">該当する公開案件はありません。</p>';
   }
 
   function tabs(page){ $$('.tab').forEach(b=>b.addEventListener('click',()=>{ $$('.tab').forEach(x=>x.classList.remove('active')); b.classList.add('active'); const t=b.dataset.type; page==='home'?renderHome(t):renderAll(t); })); }
