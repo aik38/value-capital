@@ -4,7 +4,7 @@ window.VC_CONFIG = {
   // Turnstile site key. Leave empty until Cloudflare setup is complete.
   TURNSTILE_SITE_KEY: "",
   // GA4 measurement ID. Leave empty until dedicated VALUE CAPITAL property is created.
-  GA_MEASUREMENT_ID: "",
+  GA_MEASUREMENT_ID: "G-E0MGH1P7MW",
   // Preview-only fallback. Set false when GAS public deals API is live.
   USE_SEED_DATA: false
 };
