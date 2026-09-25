@@ -67,7 +67,7 @@
     data.formType=form.dataset.formType; data.pageUrl=location.href; data.userAgent=navigator.userAgent;
     const turn=$('[name="cf-turnstile-response"]',form); if(turn) data.turnstileToken=turn.value;
     const btn=$('button[type="submit"]',form); btn.disabled=true; status.textContent='送信しています…'; status.className='form-status';
-    try { const r=await fetch(cfg.GAS_ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(data)}); const text=await r.text(); let j={}; try{j=JSON.parse(text)}catch{} if(!r.ok||j.ok===false) throw new Error(j.message||'送信エラー'); status.textContent='送信しました。担当者よりご連絡します。'; status.className='form-status success'; track(form.dataset.formType==='valuation'?'valuation_submit':'buyer_register',{deal_id:data['対象案件ID']||''}); form.reset(); initBuyerId(); if(window.turnstile) window.turnstile.reset(); }
+    try { const r=await fetch(cfg.GAS_ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(data)}); const text=await r.text(); let j={}; try{j=JSON.parse(text)}catch{} if(!r.ok||j.ok===false) throw new Error(j.message||'送信エラー'); status.textContent=j.receiptSent?'送信しました。受付メールをお送りしました。':'送信しました。担当者よりご連絡します。'; status.className='form-status success'; track(form.dataset.formType==='valuation'?'valuation_submit':'buyer_register',{deal_id:data['対象案件ID']||''}); form.reset(); initBuyerId(); if(window.turnstile) window.turnstile.reset(); }
     catch(e){ console.error(e); status.textContent='送信できませんでした。時間をおいて再度お試しいただくか、info@value-capital.jp へご連絡ください。'; status.className='form-status error'; }
     finally{btn.disabled=false;}
   }
