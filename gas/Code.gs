@@ -35,13 +35,13 @@ function doPost(e){
     const book=getBook_(); const now=new Date();
     if(data.formType==='valuation'){
       const sh=book.getSheetByName(VALUATION_SHEET); sh.appendRow([now,data['会社名']||'',data['氏名']||'',data['メールアドレス']||'',data['電話番号']||'',data['相談内容']||'',data['売上規模']||'',data['不動産所在地']||'',data['希望時期']||'',data['自由記入']||'',data.pageUrl||'',data.userAgent||'']);
-      MailApp.sendEmail({to:NOTIFY_EMAIL,subject:'[VALUE CAPITAL] 査定依頼',htmlBody:mailBody_(data)});
+      MailApp.sendEmail({to:NOTIFY_EMAIL,replyTo:data['メールアドレス']||'',name:'VALUE CAPITAL',subject:'[VALUE CAPITAL] 査定依頼',htmlBody:mailBody_(data)});
       return json_({ok:true});
     }
     if(data.formType==='buyer'){
       const cats=Array.isArray(data['取得希望カテゴリー'])?data['取得希望カテゴリー'].join(' / '):(data['取得希望カテゴリー']||'');
       const sh=book.getSheetByName(BUYER_SHEET); sh.appendRow([now,data['対象案件ID']||'',data['会社名']||'',data['担当者名']||'',data['メールアドレス']||'',data['電話番号']||'',cats,data['希望地域']||'',data['希望規模']||'',data['その他条件']||'',data.pageUrl||'',data.userAgent||'']);
-      MailApp.sendEmail({to:NOTIFY_EMAIL,subject:'[VALUE CAPITAL] 買手登録'+(data['対象案件ID']?' '+data['対象案件ID']:''),htmlBody:mailBody_(data)});
+      MailApp.sendEmail({to:NOTIFY_EMAIL,replyTo:data['メールアドレス']||'',name:'VALUE CAPITAL',subject:'[VALUE CAPITAL] 買手登録'+(data['対象案件ID']?' '+data['対象案件ID']:''),htmlBody:mailBody_(data)});
       return json_({ok:true});
     }
     return json_({ok:false,message:'unknown form'});
