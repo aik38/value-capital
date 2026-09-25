@@ -51,7 +51,7 @@ function doPost(e){
   }catch(err){ return json_({ok:false,message:String(err)}); }
 }
 
-function checkAliases_(){ console.log(GmailApp.getAliases()); }
+function checkAliases(){ console.log(GmailApp.getAliases()); }
 
 function sendReceipt_(data,type){
   const to=(data['メールアドレス']||'').trim();
