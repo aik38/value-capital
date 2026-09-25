@@ -2,6 +2,7 @@ const PUBLIC_SHEET = '公開用案件データ';
 const VALUATION_SHEET = '査定依頼';
 const BUYER_SHEET = '買手登録';
 const NOTIFY_EMAIL = 'info@value-capital.jp';
+const FROM_EMAIL = 'info@value-capital.jp';
 
 function getBook_(){
   const id = PropertiesService.getScriptProperties().getProperty('SPREADSHEET_ID');
@@ -36,16 +37,81 @@ function doPost(e){
     if(data.formType==='valuation'){
       const sh=book.getSheetByName(VALUATION_SHEET); sh.appendRow([now,data['会社名']||'',data['氏名']||'',data['メールアドレス']||'',data['電話番号']||'',data['相談内容']||'',data['売上規模']||'',data['不動産所在地']||'',data['希望時期']||'',data['自由記入']||'',data.pageUrl||'',data.userAgent||'']);
       MailApp.sendEmail({to:NOTIFY_EMAIL,replyTo:data['メールアドレス']||'',name:'VALUE CAPITAL',subject:'[VALUE CAPITAL] 査定依頼',htmlBody:mailBody_(data)});
-      return json_({ok:true});
+      const receiptSent=sendReceipt_(data,'valuation');
+      return json_({ok:true,receiptSent});
     }
     if(data.formType==='buyer'){
       const cats=Array.isArray(data['取得希望カテゴリー'])?data['取得希望カテゴリー'].join(' / '):(data['取得希望カテゴリー']||'');
       const sh=book.getSheetByName(BUYER_SHEET); sh.appendRow([now,data['対象案件ID']||'',data['会社名']||'',data['担当者名']||'',data['メールアドレス']||'',data['電話番号']||'',cats,data['希望地域']||'',data['希望規模']||'',data['その他条件']||'',data.pageUrl||'',data.userAgent||'']);
       MailApp.sendEmail({to:NOTIFY_EMAIL,replyTo:data['メールアドレス']||'',name:'VALUE CAPITAL',subject:'[VALUE CAPITAL] 買手登録'+(data['対象案件ID']?' '+data['対象案件ID']:''),htmlBody:mailBody_(data)});
-      return json_({ok:true});
+      const receiptSent=sendReceipt_(data,'buyer');
+      return json_({ok:true,receiptSent});
     }
     return json_({ok:false,message:'unknown form'});
   }catch(err){ return json_({ok:false,message:String(err)}); }
 }
+
+function sendReceipt_(data,type){
+  const to=(data['メールアドレス']||'').trim();
+  if(!to) return false;
+
+  const aliases=GmailApp.getAliases();
+  if(!aliases.includes(FROM_EMAIL)){
+    console.error('FROM_EMAIL alias is not configured for this Google account: '+FROM_EMAIL);
+    return false;
+  }
+
+  const isValuation=type==='valuation';
+  const subject=isValuation
+    ? '[VALUE CAPITAL] 査定・ご相談を受け付けました'
+    : '[VALUE CAPITAL] 買手登録を受け付けました';
+
+  const name=isValuation ? (data['氏名']||'ご担当者様') : (data['担当者名']||'ご担当者様');
+  const rows=isValuation ? [
+    ['会社名',data['会社名']],
+    ['氏名',data['氏名']],
+    ['相談内容',data['相談内容']],
+    ['売上規模',data['売上規模']],
+    ['不動産所在地',data['不動産所在地']],
+    ['希望時期',data['希望時期']],
+    ['自由記入',data['自由記入']]
+  ] : [
+    ['対象案件ID',data['対象案件ID']],
+    ['会社名',data['会社名']],
+    ['担当者名',data['担当者名']],
+    ['取得希望カテゴリー',Array.isArray(data['取得希望カテゴリー'])?data['取得希望カテゴリー'].join(' / '):data['取得希望カテゴリー']],
+    ['希望地域',data['希望地域']],
+    ['希望規模',data['希望規模']],
+    ['その他条件',data['その他条件']]
+  ];
+
+  const visibleRows=rows.filter(r=>r[1]);
+  const plainRows=visibleRows.map(r=>r[0]+': '+String(r[1])).join('\n');
+  const htmlRows=visibleRows.map(r=>'<tr><th style="text-align:left;vertical-align:top;padding:6px 12px 6px 0;color:#555;font-weight:600;">'+escapeHtml_(r[0])+'</th><td style="padding:6px 0;">'+escapeHtml_(r[1])+'</td></tr>').join('');
+
+  const intro=isValuation
+    ? '査定・ご相談のお申し込みを受け付けました。'
+    : '買手登録のお申し込みを受け付けました。';
+
+  const plain=name+' 様\n\nVALUE CAPITALです。\n'+intro+'\n内容を確認のうえ、必要に応じてご連絡いたします。\n\n【受付内容】\n'+plainRows+'\n\nこのメールは受付確認の自動送信です。ご返信いただく場合は、そのままこのメールへご返信ください。\n\nVALUE CAPITAL\n'+FROM_EMAIL;
+
+  const html='<div style="font-family:Arial,\'Noto Sans JP\',sans-serif;line-height:1.7;color:#17212b;">'
+    +'<p>'+escapeHtml_(name)+' 様</p>'
+    +'<p>VALUE CAPITALです。<br>'+escapeHtml_(intro)+'<br>内容を確認のうえ、必要に応じてご連絡いたします。</p>'
+    +'<p style="font-weight:700;margin-top:24px;">【受付内容】</p>'
+    +'<table style="border-collapse:collapse;">'+htmlRows+'</table>'
+    +'<p style="margin-top:24px;color:#666;font-size:13px;">このメールは受付確認の自動送信です。ご返信いただく場合は、そのままこのメールへご返信ください。</p>'
+    +'<p>VALUE CAPITAL<br><a href="mailto:'+FROM_EMAIL+'">'+FROM_EMAIL+'</a></p>'
+    +'</div>';
+
+  GmailApp.sendEmail(to,subject,plain,{
+    htmlBody:html,
+    from:FROM_EMAIL,
+    name:'VALUE CAPITAL',
+    replyTo:FROM_EMAIL
+  });
+  return true;
+}
+
 function mailBody_(d){return Object.keys(d).filter(k=>!['turnstileToken','userAgent'].includes(k)).map(k=>'<b>'+escapeHtml_(k)+'</b>: '+escapeHtml_(Array.isArray(d[k])?d[k].join(' / '):d[k])+'<br>').join('');}
 function escapeHtml_(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
