@@ -6,5 +6,5 @@ window.VC_CONFIG = {
   // GA4 measurement ID. Leave empty until dedicated VALUE CAPITAL property is created.
   GA_MEASUREMENT_ID: "",
   // Preview-only fallback. Set false when GAS public deals API is live.
-  USE_SEED_DATA: true
+  USE_SEED_DATA: false
 };
