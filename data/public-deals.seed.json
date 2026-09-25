@@ -1,0 +1,257 @@
+[
+  {
+    "id": "MA-001",
+    "kind": "ma",
+    "category": "M&A",
+    "region": "九州北部",
+    "title": "製造業",
+    "headline": "売上3〜5億円｜黒字企業",
+    "fields": [
+      [
+        "売上",
+        "3〜5億円"
+      ],
+      [
+        "利益状況",
+        "黒字企業"
+      ]
+    ],
+    "feature": "",
+    "top": true,
+    "status": "公開中"
+  },
+  {
+    "id": "MA-002",
+    "kind": "ma",
+    "category": "M&A",
+    "region": "九州",
+    "title": "建設業",
+    "headline": "売上1〜3億円｜黒字企業",
+    "fields": [
+      [
+        "売上",
+        "1〜3億円"
+      ],
+      [
+        "利益状況",
+        "黒字企業"
+      ]
+    ],
+    "feature": "",
+    "top": true,
+    "status": "公開中"
+  },
+  {
+    "id": "MA-003",
+    "kind": "ma",
+    "category": "M&A",
+    "region": "九州",
+    "title": "IT・ソフトウェア",
+    "headline": "売上5,000万〜1億円｜自社サービス保有",
+    "fields": [
+      [
+        "売上",
+        "5,000万〜1億円"
+      ],
+      [
+        "特徴",
+        "自社サービス保有"
+      ]
+    ],
+    "feature": "自社サービス保有",
+    "top": true,
+    "status": "公開中"
+  },
+  {
+    "id": "MA-004",
+    "kind": "ma",
+    "category": "M&A",
+    "region": "九州",
+    "title": "運送・物流業",
+    "headline": "売上5〜10億円｜事業承継案件",
+    "fields": [
+      [
+        "売上",
+        "5〜10億円"
+      ],
+      [
+        "譲渡理由",
+        "事業承継"
+      ]
+    ],
+    "feature": "",
+    "top": true,
+    "status": "公開中"
+  },
+  {
+    "id": "MA-005",
+    "kind": "ma",
+    "category": "M&A",
+    "region": "九州",
+    "title": "飲食業",
+    "headline": "売上1〜3億円｜複数店舗展開",
+    "fields": [
+      [
+        "売上",
+        "1〜3億円"
+      ],
+      [
+        "特徴",
+        "複数店舗展開"
+      ]
+    ],
+    "feature": "複数店舗展開",
+    "top": false,
+    "status": "公開中"
+  },
+  {
+    "id": "MA-H001",
+    "kind": "ma",
+    "category": "M&A",
+    "region": "九州",
+    "title": "旅館・宿泊業",
+    "headline": "不動産自社所有｜黒字案件",
+    "fields": [
+      [
+        "種別",
+        "旅館・宿泊業"
+      ],
+      [
+        "不動産",
+        "自社所有"
+      ],
+      [
+        "収益状況",
+        "黒字案件"
+      ]
+    ],
+    "feature": "",
+    "top": true,
+    "status": "公開中"
+  },
+  {
+    "id": "MA-H002",
+    "kind": "ma",
+    "category": "M&A",
+    "region": "九州主要都市",
+    "title": "ホテル",
+    "headline": "不動産自社所有｜事業承継案件",
+    "fields": [
+      [
+        "種別",
+        "ホテル"
+      ],
+      [
+        "不動産",
+        "自社所有"
+      ],
+      [
+        "譲渡理由",
+        "事業承継"
+      ]
+    ],
+    "feature": "",
+    "top": false,
+    "status": "公開中"
+  },
+  {
+    "id": "MA-H003",
+    "kind": "ma",
+    "category": "M&A",
+    "region": "九州",
+    "title": "リゾートホテル",
+    "headline": "事業譲渡｜再生・運営改善案件",
+    "fields": [
+      [
+        "種別",
+        "リゾートホテル"
+      ],
+      [
+        "希望スキーム",
+        "事業譲渡"
+      ],
+      [
+        "特徴",
+        "再生・運営改善案件"
+      ]
+    ],
+    "feature": "再生・運営改善案件",
+    "top": false,
+    "status": "公開中"
+  },
+  {
+    "id": "RE-001",
+    "kind": "realestate",
+    "category": "法人不動産",
+    "region": "福岡県北部",
+    "title": "工場・倉庫",
+    "headline": "3,000㎡前後｜空室",
+    "fields": [
+      [
+        "物件種別",
+        "工場・倉庫"
+      ],
+      [
+        "土地面積",
+        "3,000㎡前後"
+      ],
+      [
+        "現況",
+        "空室"
+      ]
+    ],
+    "feature": "",
+    "top": false,
+    "status": "公開中"
+  },
+  {
+    "id": "RE-002",
+    "kind": "realestate",
+    "category": "法人不動産",
+    "region": "福岡都市圏",
+    "title": "開発用地",
+    "headline": "1,500㎡前後｜更地",
+    "fields": [
+      [
+        "物件種別",
+        "開発用地"
+      ],
+      [
+        "土地面積",
+        "1,500㎡前後"
+      ],
+      [
+        "現況",
+        "更地"
+      ]
+    ],
+    "feature": "",
+    "top": false,
+    "status": "公開中"
+  },
+  {
+    "id": "RE-003",
+    "kind": "realestate",
+    "category": "法人不動産",
+    "region": "熊本都市圏",
+    "title": "一棟収益物件",
+    "headline": "稼働中｜法人所有",
+    "fields": [
+      [
+        "物件種別",
+        "一棟収益物件"
+      ],
+      [
+        "現況",
+        "稼働中"
+      ],
+      [
+        "所有形態",
+        "法人所有"
+      ]
+    ],
+    "feature": "法人所有",
+    "top": false,
+    "status": "公開中"
+  }
+]
