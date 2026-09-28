@@ -45,17 +45,17 @@
     const keys=d.kind==='ma'
       ? ['売上','譲渡理由','客室規模','不動産']
       : ['土地面積','建物','現況','想定用途','希望条件','売却時期','不動産'];
+    const labelMap={不動産:'所有形態'};
     const fields=compact?'':keys
       .filter(k=>fieldMap.get(k))
       .slice(0,8)
-      .map(k=>`<div><dt>${esc(k)}</dt><dd>${esc(fieldMap.get(k))}</dd></div>`)
+      .map(k=>`<div><dt>${esc(labelMap[k]||k)}</dt><dd>${esc(fieldMap.get(k))}</dd></div>`)
       .join('');
-    const duplicateFeature=(d.fields||[]).some(([,v])=>String(v||'')===String(d.feature||''));
-    const feature=(!compact&&d.feature&&!duplicateFeature)
-      ? `<div class="deal-feature"><span>特徴</span><p>${esc(d.feature)}</p></div>`
-      : '';
     const category=d.kind==='realestate'?'事業用不動産':d.category;
-    return `<article class="deal-card ${compact?'compact':''}" data-kind="${esc(d.kind)}"><div class="deal-top"><span class="deal-type">${esc(category)}</span><span class="deal-id">${esc(d.id)}</span></div><p class="deal-region">${esc(d.region)}</p><h3>${esc(d.title)}</h3><p class="deal-headline">${esc(d.headline)}</p>${compact?'':`<dl class="deal-fields">${fields}</dl>${feature}`}<a class="deal-cta" data-deal-cta data-id="${esc(d.id)}" href="/buyer/?deal=${encodeURIComponent(d.id)}">この案件の詳細情報を希望する <span>→</span></a></article>`;
+    const headline=String(d.headline||'').replace(/[｜|]/g,'、');
+    const href=compact?`/deals/#${encodeURIComponent(d.id)}`:`/buyer/?deal=${encodeURIComponent(d.id)}`;
+    const label=compact?'この案件を見る':'この案件の詳細情報を希望する';
+    return `<article id="${esc(d.id)}" class="deal-card ${compact?'compact':''}" data-kind="${esc(d.kind)}"><div class="deal-top"><span class="deal-type">${esc(category)}</span><span class="deal-id">${esc(d.id)}</span></div><p class="deal-region">${esc(d.region)}</p><h3>${esc(d.title)}</h3><p class="deal-headline">${esc(headline)}</p>${compact?'':`<dl class="deal-fields">${fields}</dl>`}<a class="deal-cta" data-deal-cta data-id="${esc(d.id)}" href="${href}">${label} <span>→</span></a></article>`;
   }
 
   async function renderHome(type='all'){
@@ -63,6 +63,10 @@
   }
   async function renderAll(type='all'){
     const el=$('#all-deals'); if(!el) return; const all=await fetchDeals(); const list=all.filter(d=>type==='all'||d.kind===type); el.innerHTML=list.length?list.map(d=>card(d,false)).join(''):'<p class="empty">該当する公開案件はありません。</p>';
+    if(location.hash){
+      const id=decodeURIComponent(location.hash.slice(1));
+      requestAnimationFrame(()=>document.getElementById(id)?.scrollIntoView({block:'start'}));
+    }
   }
 
   function tabs(page){ $$('.tab').forEach(b=>b.addEventListener('click',()=>{ $$('.tab').forEach(x=>x.classList.remove('active')); b.classList.add('active'); const t=b.dataset.type; page==='home'?renderHome(t):renderAll(t); })); }
