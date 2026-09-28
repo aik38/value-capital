@@ -41,9 +41,20 @@
   }
 
   function card(d, compact=false){
-    const fields=(d.fields||[]).slice(0,compact?2:6).map(([k,v])=>`<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('');
+    const fieldMap=new Map(d.fields||[]);
+    const keys=d.kind==='ma'
+      ? ['売上','譲渡理由','客室規模','不動産']
+      : ['土地面積','建物','現況','想定用途','希望条件','売却時期','不動産'];
+    const fields=compact?'':keys
+      .filter(k=>fieldMap.get(k))
+      .slice(0,8)
+      .map(k=>`<div><dt>${esc(k)}</dt><dd>${esc(fieldMap.get(k))}</dd></div>`)
+      .join('');
+    const feature=(!compact&&d.feature)
+      ? `<div class="deal-feature"><span>特徴</span><p>${esc(d.feature)}</p></div>`
+      : '';
     const category=d.kind==='realestate'?'事業用不動産':d.category;
-    return `<article class="deal-card ${compact?'compact':''}" data-kind="${esc(d.kind)}"><div class="deal-top"><span class="deal-type">${esc(category)}</span><span class="deal-id">${esc(d.id)}</span></div><p class="deal-region">${esc(d.region)}</p><h3>${esc(d.title)}</h3><p class="deal-headline">${esc(d.headline)}</p>${compact?'':`<dl class="deal-fields">${fields}</dl><p class="deal-feature">${esc(d.feature||'')}</p>`}<a class="deal-cta" data-deal-cta data-id="${esc(d.id)}" href="/buyer/?deal=${encodeURIComponent(d.id)}">この案件の詳細情報を希望する <span>→</span></a></article>`;
+    return `<article class="deal-card ${compact?'compact':''}" data-kind="${esc(d.kind)}"><div class="deal-top"><span class="deal-type">${esc(category)}</span><span class="deal-id">${esc(d.id)}</span></div><p class="deal-region">${esc(d.region)}</p><h3>${esc(d.title)}</h3><p class="deal-headline">${esc(d.headline)}</p>${compact?'':`<dl class="deal-fields">${fields}</dl>${feature}`}<a class="deal-cta" data-deal-cta data-id="${esc(d.id)}" href="/buyer/?deal=${encodeURIComponent(d.id)}">この案件の詳細情報を希望する <span>→</span></a></article>`;
   }
 
   async function renderHome(type='all'){
