@@ -50,7 +50,8 @@
       .slice(0,8)
       .map(k=>`<div><dt>${esc(k)}</dt><dd>${esc(fieldMap.get(k))}</dd></div>`)
       .join('');
-    const feature=(!compact&&d.feature)
+    const duplicateFeature=(d.fields||[]).some(([,v])=>String(v||'')===String(d.feature||''));
+    const feature=(!compact&&d.feature&&!duplicateFeature)
       ? `<div class="deal-feature"><span>特徴</span><p>${esc(d.feature)}</p></div>`
       : '';
     const category=d.kind==='realestate'?'事業用不動産':d.category;
