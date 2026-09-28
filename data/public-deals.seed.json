@@ -182,7 +182,7 @@
   {
     "id": "RE-001",
     "kind": "realestate",
-    "category": "法人不動産",
+    "category": "事業用不動産",
     "region": "福岡県北部",
     "title": "工場・倉庫",
     "headline": "3,000㎡前後｜空室",
@@ -207,7 +207,7 @@
   {
     "id": "RE-002",
     "kind": "realestate",
-    "category": "法人不動産",
+    "category": "事業用不動産",
     "region": "福岡都市圏",
     "title": "開発用地",
     "headline": "1,500㎡前後｜更地",
@@ -232,7 +232,7 @@
   {
     "id": "RE-003",
     "kind": "realestate",
-    "category": "法人不動産",
+    "category": "事業用不動産",
     "region": "熊本都市圏",
     "title": "一棟収益物件",
     "headline": "稼働中｜法人所有",
