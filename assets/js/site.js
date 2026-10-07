@@ -3,7 +3,6 @@
   const $ = (s,ctx=document)=>ctx.querySelector(s);
   const $$ = (s,ctx=document)=>[...ctx.querySelectorAll(s)];
   let deals=[];
-  const esc=s=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 
   function track(name, params={}) { if (typeof window.gtag==='function') window.gtag('event', name, params); }
   function loadGA(){ if(!cfg.GA_MEASUREMENT_ID) return; const s=document.createElement('script'); s.async=true; s.src=`https://www.googletagmanager.com/gtag/js?id=${cfg.GA_MEASUREMENT_ID}`; document.head.appendChild(s); window.dataLayer=window.dataLayer||[]; window.gtag=function(){dataLayer.push(arguments)}; gtag('js',new Date()); gtag('config',cfg.GA_MEASUREMENT_ID); }
@@ -37,38 +36,26 @@
       }
     }
 
-    return [];
+    return null;
   }
 
-  function card(d, compact=false){
-    const fieldMap=new Map(d.fields||[]);
-    const keys=d.kind==='ma'
-      ? ['売上','譲渡理由','客室規模','不動産']
-      : ['土地面積','建物','現況','想定用途','希望条件','売却時期','不動産'];
-    const labelMap={不動産:'所有形態'};
-    const fields=compact?'':keys
-      .filter(k=>fieldMap.get(k))
-      .slice(0,8)
-      .map(k=>`<div><dt>${esc(labelMap[k]||k)}</dt><dd>${esc(fieldMap.get(k))}</dd></div>`)
-      .join('');
-    const category=d.kind==='realestate'?'事業用不動産':d.category;
-    const headline=String(d.headline||'').replace(/[｜|]/g,'、');
-    const href=compact?`/deals/#${encodeURIComponent(d.id)}`:`/buyer/?deal=${encodeURIComponent(d.id)}`;
-    const label=compact?'この案件を見る':'この案件の詳細情報を希望する';
-    return `<article id="${esc(d.id)}" class="deal-card ${compact?'compact':''}" data-kind="${esc(d.kind)}"><div class="deal-top"><span class="deal-type">${esc(category)}</span><span class="deal-id">${esc(d.id)}</span></div><p class="deal-region">${esc(d.region)}</p><h3>${esc(d.title)}</h3><p class="deal-headline">${esc(headline)}</p>${compact?'':`<dl class="deal-fields">${fields}</dl>`}<a class="deal-cta" data-deal-cta data-id="${esc(d.id)}" href="${href}">${label} <span>→</span></a></article>`;
-  }
+  const card=(d,compact=false)=>window.VC_DEALS.card(d,compact);
 
   async function renderHome(type='all'){
-    const el=$('#home-deals'); if(!el) return; const all=await fetchDeals(); const list=all.filter(d=>d.top && (type==='all'||d.kind===type)).slice(0,6); el.innerHTML=list.length?list.map(d=>card(d,true)).join(''):'<p class="empty">公開中の案件情報を準備しています。</p>';
+    const el=$('#home-deals'); if(!el) return; const all=await fetchDeals(); if(all===null)return; const list=all.filter(d=>d.top && (type==='all'||d.kind===type)).slice(0,6); el.innerHTML=list.length?list.map(d=>card(d,true)).join(''):'<p class="empty">公開中の案件情報を準備しています。</p>'; updateDealSchema(el);
   }
   async function renderAll(type='all'){
-    const el=$('#all-deals'); if(!el) return; const all=await fetchDeals(); const list=all.filter(d=>type==='all'||d.kind===type); el.innerHTML=list.length?list.map(d=>card(d,false)).join(''):'<p class="empty">該当する公開案件はありません。</p>';
+    const el=$('#all-deals'); if(!el) return; const all=await fetchDeals(); if(all===null)return; const list=all.filter(d=>type==='all'||d.kind===type); el.innerHTML=list.length?list.map(d=>card(d,false)).join(''):'<p class="empty">該当する公開案件はありません。</p>'; updateDealSchema(el);
     if(location.hash){
       const id=decodeURIComponent(location.hash.slice(1));
       requestAnimationFrame(()=>document.getElementById(id)?.scrollIntoView({block:'start'}));
     }
   }
 
+  function updateDealSchema(el){
+    const script=$('#deal-list-schema'); if(!script)return;
+    script.textContent=JSON.stringify({'@context':'https://schema.org','@type':'ItemList','@id':location.origin+location.pathname+'#deals',numberOfItems:el.querySelectorAll('article').length,itemListElement:[...el.querySelectorAll('article')].map((a,i)=>({'@type':'ListItem',position:i+1,url:'https://value-capital.jp/deals/#'+encodeURIComponent(a.id),name:$('h3',a).textContent}))});
+  }
   function tabs(page){ $$('.tab').forEach(b=>b.addEventListener('click',()=>{ $$('.tab').forEach(x=>x.classList.remove('active')); b.classList.add('active'); const t=b.dataset.type; page==='home'?renderHome(t):renderAll(t); })); }
   function nav(){ const b=$('.menu-button'), m=$('.mobile-nav'); if(!b||!m)return; b.addEventListener('click',()=>{ const open=b.getAttribute('aria-expanded')==='true'; b.setAttribute('aria-expanded',String(!open)); m.hidden=open; document.body.classList.toggle('nav-open',!open); }); }
 
