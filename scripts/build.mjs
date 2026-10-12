@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import vm from 'node:vm';
 import {fileURLToPath} from 'node:url';
+import {publicFiles} from './publication.mjs';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const output=path.join(root,'dist');
@@ -34,9 +35,16 @@ const deals=source.map(d=>{
   fields:d.fields.filter(p=>Array.isArray(p)&&allowed.includes(p[0])).map(([k,v])=>[k,text(v)])};
 });
 // Validate everything before creating output; a failed build never replaces Pages.
+// Reused workspaces must not carry stale or unapproved files into a release.
+await fs.rm(output,{recursive:true,force:true});
 await fs.mkdir(output,{recursive:true});
-const entries=['index.html','deals','valuation','buyer','company','privacy','terms','assets','CNAME','robots.txt','sitemap.xml',...['deals','valuation','buyer','company','privacy','terms'].map(p=>p+'.html')];
-for(const entry of entries)await fs.cp(path.join(root,entry),path.join(output,entry),{recursive:true});
+for(const entry of publicFiles){
+ const source=path.join(root,entry);
+ if(!(await fs.lstat(source)).isFile())throw new Error('Expected public regular file: '+entry);
+ const destination=path.join(output,entry);
+ await fs.mkdir(path.dirname(destination),{recursive:true});
+ await fs.copyFile(source,destination);
+}
 await fs.writeFile(path.join(output,'.nojekyll'),'');
 for(const [page,id,compact] of [['','home-deals',true],['deals/','all-deals',false]]){
  const file=path.join(output,page,'index.html');let html=await fs.readFile(file,'utf8');

@@ -2,19 +2,19 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import assert from 'node:assert/strict';
 import {fileURLToPath} from 'node:url';
+import {pages,pageFile,pageUrl,publicFiles,origin} from './publication.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..','dist');
-const pages=['','deals','valuation','buyer','company','privacy','terms'];
 const titles=new Set(),descriptions=new Set();let checked=0;
 for(const page of pages){
- const filename=(page?page+'/':'')+'index.html',html=await fs.readFile(path.join(root,filename),'utf8');
- const url='https://value-capital.jp/'+(page?page+'/':'');
+ const filename=pageFile(page),html=await fs.readFile(path.join(root,filename),'utf8');
+ const url=pageUrl(page);
  assert.ok(html.includes('<html lang="ja">'),filename+' language');
  assert.equal(html.match(/rel="canonical" href="([^"]+)"/)[1],url);
  assert.equal(html.match(/property="og:url" content="([^"]+)"/)[1],url);
  const title=html.match(/<title>(.*?)<\/title>/s)[1],description=html.match(/name="description" content="([^"]+)"/)[1];
  assert.ok(!titles.has(title)&&!descriptions.has(description),'Duplicate metadata');titles.add(title);descriptions.add(description);
  assert.equal(html.match(/<h1\b/g)?.length,1,'One primary heading');
- assert.equal(html.includes('content="noindex'),['privacy','terms'].includes(page),'Index policy');
+ assert.equal(html.includes('content="noindex'),!page.indexable,'Index policy');
  const ids=[...html.matchAll(/\sid="([^"]+)"/g)].map(m=>m[1]);assert.equal(new Set(ids).size,ids.length,'Duplicate IDs');
  for(const match of html.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>(.*?)<\/script>/gs)){
   const data=JSON.parse(match[1]);assert.equal(data['@context'],'https://schema.org');
@@ -29,11 +29,27 @@ for(const page of pages){
  }
 }
 const sitemap=await fs.readFile(path.join(root,'sitemap.xml'),'utf8');
-assert.equal(sitemap.match(/<loc>/g).length,5);assert.ok(!sitemap.includes('.html')&&!sitemap.includes('privacy/')&&!sitemap.includes('terms/'));
-for(const loc of sitemap.matchAll(/<loc>(.*?)<\/loc>/g))assert.ok(loc[1].startsWith('https://value-capital.jp/'));
+const locations=[...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>m[1]);
+assert.equal(new Set(locations).size,locations.length,'Duplicate sitemap URLs');
+assert.deepEqual([...locations].sort(),pages.filter(p=>p.indexable).map(pageUrl).sort(),'Sitemap must match approved indexable pages');
+for(const loc of locations){
+ const url=new URL(loc);
+ assert.equal(url.origin,origin);assert.equal(url.search,'');assert.equal(url.hash,'');
+ assert.ok(url.pathname.endsWith('/'),'Canonical directory URL');
+}
 assert.ok(!sitemap.includes('<lastmod>'),'Do not fabricate modification dates');
 assert.equal((await fs.readFile(path.join(root,'robots.txt'),'utf8')).trim().replace(/\r/g,''),'User-agent: *\nAllow: /\n\nSitemap: https://value-capital.jp/sitemap.xml');
 assert.ok((await fs.readFile(path.join(root,'assets/js/config.js'),'utf8')).includes('G-E0MGH1P7MW'));
-for(const page of pages.filter(Boolean)){const html=await fs.readFile(path.join(root,page+'.html'),'utf8');assert.ok(html.includes('noindex,follow'));assert.ok(html.includes(`content="0;url=/${page}/"`));}
+for(const page of pages.filter(p=>p.redirect)){const html=await fs.readFile(path.join(root,page.path+'.html'),'utf8');assert.ok(html.includes('noindex,follow'));assert.ok(html.includes(`content="0;url=/${page.path}/"`));}
+async function artifactFiles(directory,prefix=''){
+ const files=[];
+ for(const entry of await fs.readdir(directory,{withFileTypes:true})){
+  const name=prefix+entry.name;
+  if(entry.isDirectory())files.push(...await artifactFiles(path.join(directory,entry.name),name+'/'));
+  else {assert.ok(entry.isFile(),'No symlinks or special files in artifact');files.push(name);}
+ }
+ return files;
+}
+assert.deepEqual((await artifactFiles(root)).sort(),[...publicFiles,'.nojekyll'].sort(),'Artifact must contain only explicitly approved files');
 for(const privatePath of ['gas','data','scripts','.github']){await assert.rejects(fs.access(path.join(root,privatePath)));}
 console.log(`PASS: ${pages.length} pages, ${checked} internal links/assets, metadata, JSON-LD, sitemap, robots, redirect stubs and publication allowlist.`);

@@ -26,7 +26,15 @@ Canonical URLs use HTTPS, no www, and trailing slashes. GitHub Pages itself hand
 HTTP/www/directory redirects. Old `.html` compatibility files remain instant
 meta-refresh redirects with canonical URLs and `noindex,follow`; Pages does not
 provide per-path server redirect rules. Do not change DNS for these redirects.
-Privacy and terms remain noindex and excluded from the five-URL sitemap.
+Privacy and terms remain noindex and excluded from the sitemap.
+`scripts/publication.mjs` explicitly lists reviewed public pages, their index policy,
+legacy redirects and individual assets. Build and verification share that list;
+sitemap URLs must exactly match its indexable pages, without a fixed URL count.
+For a future approved page, add its manifest entry and canonical sitemap URL together.
+No draft URL or directory is auto-discovered. The build cleans dist and copies only
+listed regular files; verification rejects extra files, including stale output.
+Keep private sources/data outside this list. Future content must provide public HTML,
+unique metadata, canonical/OGP URLs and valid JSON-LD before deployment.
 No sitemap lastmod is asserted because a build timestamp is not a content-change timestamp.
 
 Organization and WebSite have stable IDs; WebPage/AboutPage reference them.
