@@ -37,6 +37,20 @@ Keep private sources/data outside this list. Future content must provide public 
 unique metadata, canonical/OGP URLs and valid JSON-LD before deployment.
 No sitemap lastmod is asserted because a build timestamp is not a content-change timestamp.
 
+## M&A news publication (initial integration, awaiting approval)
+
+`scripts/news-publication.json` explicitly lists the news index, individual article
+paths and the single news stylesheet. `scripts/news-manifest.mjs` validates their
+scope, regular-file status and SHA-256 digests before adding them to the existing
+publication allowlist. It never scans directories for additional HTML. Drafts,
+Private JSON, extraction evidence, usage logs and credentials are not public assets.
+An empty news index remains noindex and outside sitemap until approved articles exist.
+For approved articles, the manifest and sitemap are updated in the same Public commit.
+The existing build, checks, GAS retrieval and Pages schedule are retained unchanged.
+NewsArticle checks supplement every existing metadata/allowlist check. News pages
+link to the existing LP, valuation, buyer and deals pages; existing page bodies,
+CSS/JS, form/GAS behavior and navigation are unchanged.
+
 Organization and WebSite have stable IDs; WebPage/AboutPage reference them.
 ItemList contains only the actual displayed cards, and is updated after filtering.
 No invisible FAQ, invented reviews, licenses, phone numbers or social profiles are added.
