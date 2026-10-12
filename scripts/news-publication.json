@@ -1,0 +1,16 @@
+{
+  "assets": [
+    {
+      "path": "ma-news/news.css",
+      "sha256": "9625e2e23d76206c84c70f29058192123ea79ac86a83a63a478fd80d19a18717"
+    }
+  ],
+  "pages": [
+    {
+      "indexable": false,
+      "path": "ma-news",
+      "sha256": "b10c0c3a3c62281b707de6ffd12a1fc60ddabbd0f3ac48cb93e7613cb1c1cc2b"
+    }
+  ],
+  "schema_version": 1
+}

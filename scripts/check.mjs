@@ -20,12 +20,26 @@ for(const page of pages){
   const data=JSON.parse(match[1]);assert.equal(data['@context'],'https://schema.org');
   const graph=data['@graph']||[data];for(const node of graph){assert.ok(node['@id']?.startsWith('https://value-capital.jp/'));assert.ok(node['@type']);}
   if(data['@type']==='ItemList')assert.equal(data.numberOfItems,html.match(/<article id=/g)?.length||0);
+  if(page.path.startsWith('ma-news/')&&data['@type']==='NewsArticle'){
+   assert.equal(data.mainEntityOfPage,url,'News article canonical');
+   assert.ok(data.headline&&data.articleBody&&data.description,'News article content');
+   assert.ok(/^https:\/\/(?:maonline\.jp|www\.nihon-ma\.co\.jp|www\.ma-cp\.com)\//.test(data.citation),'Approved news source');
+   if(page.indexable){
+    assert.ok(Number.isFinite(Date.parse(data.datePublished)),'Real publication date');
+    assert.ok(Number.isFinite(Date.parse(data.dateModified)),'Real modification date');
+    assert.ok(Date.parse(data.dateModified)>=Date.parse(data.datePublished),'Publication chronology');
+   }
+  }
  }
  for(const m of html.matchAll(/\b(?:href|src)="([^"]+)"/g)){
   if(!m[1].startsWith('/'))continue;
   const target=new URL(m[1],'https://value-capital.jp');let file=decodeURIComponent(target.pathname).slice(1);if(!file||file.endsWith('/'))file+='index.html';
   await fs.access(path.join(root,file));checked++;
   if(target.hash){const dest=await fs.readFile(path.join(root,file),'utf8');assert.ok(dest.includes(`id="${decodeURIComponent(target.hash.slice(1))}"`),'Broken fragment '+m[1]);}
+ }
+ if(page.path.startsWith('ma-news/')){
+  assert.equal([...html.matchAll(/"@type":"NewsArticle"/g)].length,1,'Exactly one news article schema');
+  for(const destination of ['/','/valuation/','/buyer/','/deals/'])assert.ok(html.includes(`href="${destination}"`),'News-to-LP link');
  }
 }
 const sitemap=await fs.readFile(path.join(root,'sitemap.xml'),'utf8');
