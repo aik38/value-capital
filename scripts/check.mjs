@@ -23,7 +23,7 @@ for(const page of pages){
   if(page.path.startsWith('ma-news/')&&data['@type']==='NewsArticle'){
    assert.equal(data.mainEntityOfPage,url,'News article canonical');
    assert.ok(data.headline&&data.articleBody&&data.description,'News article content');
-   assert.ok(/^https:\/\/(?:maonline\.jp|www\.nihon-ma\.co\.jp|www\.ma-cp\.com)\//.test(data.citation),'Approved news source');
+   assert.ok(!Object.hasOwn(data,'citation'),'Source citation must stay Private');
    if(page.indexable){
     assert.ok(Number.isFinite(Date.parse(data.datePublished)),'Real publication date');
     assert.ok(Number.isFinite(Date.parse(data.dateModified)),'Real modification date');
@@ -39,6 +39,9 @@ for(const page of pages){
  }
  if(page.path.startsWith('ma-news/')){
   assert.equal([...html.matchAll(/"@type":"NewsArticle"/g)].length,1,'Exactly one news article schema');
+  assert.equal([...html.matchAll(/<time\b/g)].length,1,'One visible source date');
+  assert.ok(!/class="news-(?:facts|source|tag)"|<dl\b|<table\b/.test(html),'No internal display blocks');
+  assert.ok(!/元情報掲載日|本サイト公開|以下は元情報掲載日時点|本記事は出典の公表情報/.test(html),'No public management notes');
   for(const destination of ['/','/valuation/','/buyer/','/deals/'])assert.ok(html.includes(`href="${destination}"`),'News-to-LP link');
  }
 }
@@ -67,3 +70,4 @@ async function artifactFiles(directory,prefix=''){
 assert.deepEqual((await artifactFiles(root)).sort(),[...publicFiles,'.nojekyll'].sort(),'Artifact must contain only explicitly approved files');
 for(const privatePath of ['gas','data','scripts','.github']){await assert.rejects(fs.access(path.join(root,privatePath)));}
 console.log(`PASS: ${pages.length} pages, ${checked} internal links/assets, metadata, JSON-LD, sitemap, robots, redirect stubs and publication allowlist.`);
+
