@@ -9,7 +9,12 @@
     {
       "indexable": true,
       "path": "ma-news",
-      "sha256": "bcd7a1bbb1c66dee7717e905b016fb866ad79ce27a9f93cd94da4f661cb6b05f"
+      "sha256": "4c4bc47ccf387fd87a9a22298b0e45a201d2ae1daef991e7d0b0d17f8f814b2d"
+    },
+    {
+      "indexable": true,
+      "path": "ma-news/2026/vc-059905a2a5ca57c7",
+      "sha256": "2abe8fd9717591d2543624c049c5bc9f430a0314d74f4f60aaa30c6852e7e0e1"
     },
     {
       "indexable": true,
@@ -25,6 +30,11 @@
       "indexable": true,
       "path": "ma-news/2026/vc-1a6815a3e6569a70",
       "sha256": "ffed440ca2c8ec6d4d02c53cc3053368595295f64029097f0023c982e792dad7"
+    },
+    {
+      "indexable": true,
+      "path": "ma-news/2026/vc-1ae2071a4c1fd92c",
+      "sha256": "b843bda0456e01e8d7a637f513e6879bc11c55855ba9720240335641a2d97b70"
     },
     {
       "indexable": true,
@@ -188,8 +198,18 @@
     },
     {
       "indexable": true,
+      "path": "ma-news/2026/vc-9ef715a0ba8d510a",
+      "sha256": "8fcc6ce640f36ad9770daebfce24473b9021021abec924dda3f3a0eae60dbb21"
+    },
+    {
+      "indexable": true,
       "path": "ma-news/2026/vc-9effb8ea2e5d60d2",
       "sha256": "0cac2cbbb7748f8a412a2d60452ed50fe3c127a734b1c48da82c8efd4823314c"
+    },
+    {
+      "indexable": true,
+      "path": "ma-news/2026/vc-a22b5fe5d8abe6d2",
+      "sha256": "f5d3e961f4c80f57d3427eb9263963b7c2d22f6dd58ba5e8f9a281b3f77c881c"
     },
     {
       "indexable": true,
@@ -243,8 +263,18 @@
     },
     {
       "indexable": true,
+      "path": "ma-news/2026/vc-c45891b61a0f5555",
+      "sha256": "e214d24a59cd23164e2866e0d9d960aead012bbf312914eb692fd3b29f7b40c2"
+    },
+    {
+      "indexable": true,
       "path": "ma-news/2026/vc-cfbdcb7da5ba90cb",
       "sha256": "75e2a0139c3b0eb8c7291687fde200b57e1f25b16fd98b6bdfddfca9d04ed102"
+    },
+    {
+      "indexable": true,
+      "path": "ma-news/2026/vc-d0c50624ccac1432",
+      "sha256": "c95b74cbf570b6f040bc275b08e0abe66d5364e518adf880d9c0f53d98588e93"
     },
     {
       "indexable": true,
@@ -255,6 +285,11 @@
       "indexable": true,
       "path": "ma-news/2026/vc-db8ce5592be079f0",
       "sha256": "2166c79af048364c9c3f2ea8bd8944aabb502d2bfa54d8938a00b0b63cd5a635"
+    },
+    {
+      "indexable": true,
+      "path": "ma-news/2026/vc-e10fb7ee61f232d8",
+      "sha256": "356105ecc73228e401352b74c0f8f318147f6d960299d53cfcaa7431864b30ad"
     },
     {
       "indexable": true,
