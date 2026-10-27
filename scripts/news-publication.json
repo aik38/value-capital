@@ -9,7 +9,12 @@
     {
       "indexable": true,
       "path": "ma-news",
-      "sha256": "8c1e9a8508334841878e56274736938f57a7900f5c662078a21ccb48ca5c34ad"
+      "sha256": "adfbaf595ac006cc261d35cdc1063c42a7fe30d1d671e71801d1ca0c29f2259a"
+    },
+    {
+      "indexable": true,
+      "path": "ma-news/2026/vc-02dde243a3265478",
+      "sha256": "4aa6b0512eb3e3e584fce464d3acb32aa2e9620868c4bb9c50bc4175d50d61bb"
     },
     {
       "indexable": true,
@@ -60,6 +65,11 @@
       "indexable": true,
       "path": "ma-news/2026/vc-2202c4fd26b0c7a6",
       "sha256": "03b38754630d9ecb3d328edf4629747039399d85019388a0dded35ca0f4ed709"
+    },
+    {
+      "indexable": true,
+      "path": "ma-news/2026/vc-24262a73c502cf85",
+      "sha256": "a91a70dd87104daa65489f3886613495f7688542294ae2c0caeab06a4f5faa2c"
     },
     {
       "indexable": true,
@@ -183,6 +193,11 @@
     },
     {
       "indexable": true,
+      "path": "ma-news/2026/vc-841a1cfe2b45ce7f",
+      "sha256": "a2d51d1f608f2ea7940148b99b4a5ffc24b893d714601da8f5d659c22e3543a3"
+    },
+    {
+      "indexable": true,
       "path": "ma-news/2026/vc-89df52704d56fbc4",
       "sha256": "0924fcd3ac8acbaf5a386c86aa9e4e1fbff60f446a9a54cfdc686c9a58aa928a"
     },
@@ -235,6 +250,11 @@
       "indexable": true,
       "path": "ma-news/2026/vc-b88ce5122cdfae6f",
       "sha256": "bf752326f60eb4875c64f01fd93ee024b746147bedd3fc7c368877a36fdcaf89"
+    },
+    {
+      "indexable": true,
+      "path": "ma-news/2026/vc-b8c0dc73d3b20336",
+      "sha256": "30a93a2075fc61c90142c9e191a711d4cb119781172c9fe52d5f1e8608c7021f"
     },
     {
       "indexable": true,
